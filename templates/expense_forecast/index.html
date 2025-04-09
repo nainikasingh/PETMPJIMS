@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="mb-4">Expense Forecast for Next 30 Days</h2>
+
+  <!-- Last Updated -->
+  <p class="text-muted mb-3">Last updated: {{ last_updated|date:"F j, Y, g:i a" }}</p>
+
+  <!-- Forecast Table -->
+  <div class="table-responsive mb-5">
+    <table class="table table-bordered table-striped">
+      <thead class="bg-purple text-white">
+        <tr>
+          <th>Date</th>
+          <th>Forecasted Expenses</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if forecast_data %}
+          {% for row in forecast_data %}
+            <tr>
+              <td>{{ row.Date }}</td>
+              <td>₹{{ row.Forecasted_Expenses }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="2" class="text-center">No forecast data available.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Total Forecast -->
+  <h4>Total Predicted Expense at the end of 30 days: 
+    <b style="color: #866ec7;">₹{{ total_forecasted_expenses }}</b>
+  </h4>
+
+  <!-- Forecast per Category -->
+  <h4 class="mt-5">Total Forecasted Expenses per Category:</h4>
+  <div class="table-responsive mb-5">
+    <table class="table table-bordered table-striped">
+      <thead class="bg-purple text-white">
+        <tr>
+          <th>Category</th>
+          <th>Total Forecasted Expenses</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if category_forecasts %}
+          {% for category, expenses in category_forecasts.items %}
+            <tr>
+              <td>{{ category }}</td>
+              <td>₹{{ expenses }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="2" class="text-center">No category forecasts available.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Visualization -->
+  <h4 class="mb-3">Forecast Visualization</h4>
+  <div class="text-center">
+    <img src="{% static 'img/forecast_plot.png' %}" 
+         alt="Expense Forecast Plot"
+         class="img-fluid rounded-4 shadow-lg"
+         style="max-width: 100%; height: auto; border: 2px solid #ccc;">
+  </div>
+</div>
+
+{% endblock %}
